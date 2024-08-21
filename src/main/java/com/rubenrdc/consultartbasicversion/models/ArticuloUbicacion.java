@@ -1,16 +1,33 @@
 package com.rubenrdc.consultartbasicversion.models;
 
+import jakarta.persistence.*;
 import java.util.Objects;
 
 /**
  *
  * @author Ruben
  */
+@Entity
+@Table(name = "ubicaciones_articulos", uniqueConstraints = @UniqueConstraint(columnNames = {"idUbic", "idDep", "idArt"}))
 public class ArticuloUbicacion {
 
-    private int id, stockArt;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    @Column(length = 40)
+    private int stockArt;
+
+    @ManyToOne
+    @JoinColumn(name = "idUbic")
     private Ubicacion ubicacion;
+
+    @ManyToOne
+    @JoinColumn(name = "idDep")
     private Deposito deposito;
+
+    @ManyToOne
+    @JoinColumn(name = "idArt")
+    private Articulo articulo;
 
     public ArticuloUbicacion() {
     }
@@ -54,6 +71,14 @@ public class ArticuloUbicacion {
     public ArticuloUbicacion setDeposito(Deposito deposito) {
         this.deposito = deposito;
         return this;
+    }
+
+    public Articulo getArticulo() {
+        return articulo;
+    }
+
+    public void setArticulo(Articulo articulo) {
+        this.articulo = articulo;
     }
 
     @Override

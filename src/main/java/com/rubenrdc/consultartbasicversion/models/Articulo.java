@@ -1,6 +1,7 @@
 package com.rubenrdc.consultartbasicversion.models;
 
 import com.rubenrdc.consultartbasicversion.models.interfaces.Exportable;
+import jakarta.persistence.*;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -9,20 +10,28 @@ import java.util.stream.Collectors;
  *
  * @author Ruben
  */
+@Entity
+@Table(name = "articulos")
 public class Articulo implements Exportable {
 
-    private final int limitUbicExtra = 10, limitUbicP = 1;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String codigo, desc, foto;
+
+    @Transient
+    private final int limitUbicExtra = 10, limitUbicP = 1;
+
+    @Column(length = 165)
+    private String codigo, descripcion, foto;
+    @Transient
     private final Object[] row = new Object[4];
 
+    @OneToMany(mappedBy = "articulo", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<ArticuloUbicacion> listCantsFromUbics;
 
-    public Articulo(int idArt, String code, String desc, String foto) {
+    public Articulo(int idArt, String code) {
         this.id = idArt;
         this.codigo = code;
-        this.desc = desc;
-        this.foto = foto;
     }
 
     public Articulo() {
@@ -32,7 +41,7 @@ public class Articulo implements Exportable {
     public Object[] getRow() {
         row[0] = id;
         row[1] = codigo;
-        row[2] = desc;
+        row[2] = descripcion;
         row[3] = foto;
         return row;
     }
@@ -53,12 +62,12 @@ public class Articulo implements Exportable {
         this.codigo = codigo;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public String getFoto() {
@@ -73,7 +82,7 @@ public class Articulo implements Exportable {
         if (listCantsFromUbics != null) {
             if (!listCantsFromUbics.isEmpty()) {
                 String ubicConcat = listCantsFromUbics.stream()
-                        .filter(art -> art.getDeposito().getNombre().equals(DepName))//Filtro el stream y devuelve uno con el filtro aplicado
+                        .filter(art -> art.getDeposito().getDescrip().equals(DepName))//Filtro el stream y devuelve uno con el filtro aplicado
                         .map(art -> art.getUbicacion().getUbic())//Devuelvo un stream con las ubicaciones filtradas
                         .collect(Collectors.joining(" | "));//Realizo una coleccion con los valores del anterior Stream y genero una concatenacion devolviendo un String
                 return ubicConcat;
@@ -85,7 +94,7 @@ public class Articulo implements Exportable {
     public List<Ubicacion> getListUbicByDepName(String DepName) {
         if (listCantsFromUbics != null) {
             if (!listCantsFromUbics.isEmpty()) {
-                List<Ubicacion> collect = listCantsFromUbics.stream().filter(ubi -> ubi.getDeposito().getNombre().equals(DepName)).map(art -> art.getUbicacion()).collect(Collectors.toList());
+                List<Ubicacion> collect = listCantsFromUbics.stream().filter(ubi -> ubi.getDeposito().getDescrip().equals(DepName)).map(art -> art.getUbicacion()).collect(Collectors.toList());
                 return collect;
             }
         }
@@ -95,7 +104,7 @@ public class Articulo implements Exportable {
     public Map<String, Integer> getStockByDeps() {
         if (listCantsFromUbics != null) {
             if (!listCantsFromUbics.isEmpty()) {
-                Map<String, Integer> collect = listCantsFromUbics.stream().collect(Collectors.groupingBy(art -> art.getDeposito().getNombre(), Collectors.summingInt(ArticuloUbicacion::getStockArt)));
+                Map<String, Integer> collect = listCantsFromUbics.stream().collect(Collectors.groupingBy(art -> art.getDeposito().getDescrip(), Collectors.summingInt(ArticuloUbicacion::getStockArt)));
                 return collect;
             }
         }

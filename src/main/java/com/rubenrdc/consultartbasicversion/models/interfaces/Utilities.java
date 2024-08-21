@@ -19,7 +19,7 @@ public interface Utilities {
         listDeposito.removeAllItems();
         for (Deposito d : listDeps) {
             if (d != null) {
-                listDeposito.addItem(d.getNombre());
+                listDeposito.addItem(d.getDescrip());
             }
         }
     }

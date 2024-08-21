@@ -1,9 +1,17 @@
 package com.rubenrdc.consultartbasicversion.IGU.Auth;
 
 import com.rubenrdc.consultartbasicversion.IGU.ConsArt;
+import com.rubenrdc.consultartbasicversion.dao.DaoConnection;
 import com.rubenrdc.consultartbasicversion.dao.UserDao;
+import com.rubenrdc.consultartbasicversion.models.Articulo;
+import com.rubenrdc.consultartbasicversion.models.ArticuloUbicacion;
+import com.rubenrdc.consultartbasicversion.models.Deposito;
+import com.rubenrdc.consultartbasicversion.models.Ubicacion;
 import com.rubenrdc.consultartbasicversion.models.User;
 import com.rubenrdc.consultartbasicversion.models.interfaces.Utilities;
+import jakarta.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 import javax.swing.ImageIcon;
 
@@ -19,8 +27,6 @@ public class Login extends javax.swing.JFrame implements Utilities {
 
     public Login() {
         initComponents();
-        ImageIcon img = new ImageIcon("src/main/java/com/rubenrdc/consultartoptimizado/miselaneos/icon.png");
-        setIconImage(img.getImage());
         UserTxt.setText("Ruben");
         PsstTxt.setText("1234");
         //
@@ -163,16 +169,16 @@ public class Login extends javax.swing.JFrame implements Utilities {
                         String p = new String(PsstTxt.getPassword());
                         if (u.length() <= 10 && u.length() != 0 && p.length() != 0) {
                             User user = new User(u, p);
-                            if (UserDao.checkUser(user) == true) {
+                            if (UserDao.findUser(user) != null) {
                                 dispose();
                                 ventana = new ConsArt();
                                 pinterJFrame(ventana, true, null, false);
                             } else {
-                                javax.swing.JOptionPane.showMessageDialog(null, "1Contraseña o Usuarios Inexistente");
+                                javax.swing.JOptionPane.showMessageDialog(null, "Contraseña o Usuarios Inexistente");
                             }
 
                         } else {
-                            javax.swing.JOptionPane.showMessageDialog(null, "2Contraseña o Usuarios Inexistente");
+                            javax.swing.JOptionPane.showMessageDialog(null, "Contraseña o Usuarios Inexistente");
                         }
                     } finally {
                         btnLogin.setText("Iniciar Sesion");

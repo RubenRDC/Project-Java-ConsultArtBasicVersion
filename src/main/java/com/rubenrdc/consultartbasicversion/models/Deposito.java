@@ -1,47 +1,35 @@
 package com.rubenrdc.consultartbasicversion.models;
 
 import com.rubenrdc.consultartbasicversion.models.interfaces.Exportable;
+import jakarta.persistence.*;
 
 
 /**
  *
  * @author Ruben
  */
+@Entity
+@Table(name = "depositos")
 public class Deposito implements Exportable{
-
-    private int id, numDireccion;
-    private String nombre, provincia, localidad, direccion;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    @Column(length = 11)
+    private int numero;
+    @Column(length = 100)
+    private String descrip, provincia, localidad, direccion;
+    
+    @Transient
     private final Object[] row = new Object[3];
 
     public Deposito() {
     }
 
-    public Deposito(int idDep, String nameDep) {
-        this.id = idDep;
-        this.nombre = nameDep;
-    }
-
-    public Deposito(int id, String nombre, String provincia, String localidad, String direccion, int numDireccion) {
-        this.id = id;
-        this.numDireccion = numDireccion;
-        this.nombre = nombre;
-        this.provincia = provincia;
-        this.localidad = localidad;
-        this.direccion = direccion;
-    }
-
-    public Deposito(String nombre, String provincia, String localidad, String direccion, int numDireccion) {
-        this.numDireccion = numDireccion;
-        this.nombre = nombre;
-        this.provincia = provincia;
-        this.localidad = localidad;
-        this.direccion = direccion;
-    }
-
     @Override
     public Object[] getRow() {
         row[0] = id;
-        row[1] = nombre;
+        row[1] = descrip;
         row[2] = provincia;
         return row;
     }
@@ -54,20 +42,20 @@ public class Deposito implements Exportable{
         this.id = id;
     }
 
-    public int getNumDireccion() {
-        return numDireccion;
+    public int getNumero() {
+        return numero;
     }
 
-    public void setNumDireccion(int numDireccion) {
-        this.numDireccion = numDireccion;
+    public void setNumero(int numero) {
+        this.numero = numero;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getDescrip() {
+        return descrip;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setDescrip(String descrip) {
+        this.descrip = descrip;
     }
 
     public String getProvincia() {

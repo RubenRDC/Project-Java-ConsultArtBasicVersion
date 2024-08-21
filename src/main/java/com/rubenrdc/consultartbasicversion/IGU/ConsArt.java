@@ -370,9 +370,10 @@ public class ConsArt extends javax.swing.JFrame implements Utilities {
             String c = codigoTxt.getText().toUpperCase();
             if (c.length() > 3 && c.length() <= 10) {
 
+                //Art = ArticuloDao.findCompleteArticuloByCode(c);
                 Art = ArticuloDao.findCompleteArticuloByCode(c);
                 if (Art != null) {
-                    descTxt.setText(Art.getDesc());
+                    descTxt.setText(Art.getDescripcion());
                     fillTable(tablaStock, Art.getStockByDeps());
                     listDeposito.setVisible(true);
                     JComboBoxDepositos(listDeposito, DepositosDao.getListDeps());
