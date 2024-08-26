@@ -1,11 +1,7 @@
 package com.rubenrdc.consultartbasicversion.models;
 
-import com.rubenrdc.consultartbasicversion.models.abstracts.Ubicaciones;
 import com.rubenrdc.consultartbasicversion.models.interfaces.Exportable;
 import jakarta.persistence.*;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 
 /**
  *
@@ -13,7 +9,7 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "ubicaciones")
-public class Ubicacion extends Ubicaciones implements Exportable {
+public class Ubicacion implements Exportable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,7 +40,6 @@ public class Ubicacion extends Ubicaciones implements Exportable {
         this.id = id;
     }
 
-    @Override
     public String getUbic() {
         return ubic;
     }
@@ -67,7 +62,6 @@ public class Ubicacion extends Ubicaciones implements Exportable {
         this.ubic = sector + p + "-" + e + c + "-" + a;
     }
 
-    @Override
     public void setUbic(String ConcatUbic) {
         this.ubic = ConcatUbic;
     }
@@ -78,6 +72,4 @@ public class Ubicacion extends Ubicaciones implements Exportable {
         row[1] = ubic;
         return row;
     }
-
-
 }
